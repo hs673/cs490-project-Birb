@@ -46,9 +46,9 @@ export default function Navbar() {
 
             fetch(url + '/api/pic/' + user)
             .then(res => res.json())
-            .then(data => setShowFile(data.picture))
+            .then(data => {if(data.picture !== null) {setShowFile(data.picture)}})
         }
-    }, [user, url])
+    })
 
     useEffect(() => {
 

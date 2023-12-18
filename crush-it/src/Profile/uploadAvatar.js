@@ -38,7 +38,11 @@ function UploadAvatar(props){
         if(username) {
             fetch(url + '/api/pic/' + username)
             .then(res => res.json())
-            .then(data => setShowFile(data.picture))
+            .then(data => {
+                if(data.picture !== null){
+                    setShowFile(data.picture)
+                }
+            })
         }
     }, [username, url])
 
@@ -46,7 +50,7 @@ function UploadAvatar(props){
 
     const handleUpload = async (e) => {
         e.preventDefault();
-        if (selectedFile) {
+        if (selectedFile !== null) {
             // Perform your upload logic here, e.g., send the file to your server
             let b64file = await toBase64(selectedFile);
             fetch(url + '/api/pic/' + username, {
