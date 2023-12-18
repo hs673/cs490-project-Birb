@@ -219,7 +219,7 @@ function Homepage(){
                 top.splice(id, 1)
             }
             if (originalCategory === 'Other') {
-                important.push({dateAssigned: otherTasks[id].dateAssigned, title: otherTasks[id].title, description: otherTasks[id].description, pomodoroTimers: otherTasks[id].pomodoroTimers, completedPomodoroTimers:importantTasks[id].completedPomodoroTimers, priority: 'Important', status: otherTasks[id].status})
+                important.push({dateAssigned: otherTasks[id].dateAssigned, title: otherTasks[id].title, description: otherTasks[id].description, pomodoroTimers: otherTasks[id].pomodoroTimers, completedPomodoroTimers:otherTasks[id].completedPomodoroTimers, priority: 'Important', status: otherTasks[id].status})
                 other.splice(id, 1)
             }
         }
