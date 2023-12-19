@@ -83,6 +83,7 @@ function Signup() {
       if (response.status === 400) {
         //console.log("Email already being used");
         setEmailSameError(true);
+        return;
       }
     } else {
       const taskResponse = await fetch(url + '/api/tasks', {

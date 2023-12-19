@@ -43,11 +43,11 @@ export default function Navbar( prop) {
             .then(res => res.json())
             .then(data => {setUserData(data)})
             .catch((err) => console.log(err))
-        /*
+        
             fetch(url + '/api/pic/' + user)
             .then(res => res.json())
             .then(data => {if(data.picture !== null) {setShowFile(data.picture)}})
-        }*/}
+        }
     })
 
     /*useEffect(() => {
