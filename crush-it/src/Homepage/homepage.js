@@ -200,10 +200,21 @@ function Homepage(){
     }
 
 
-    const handleDrop = async (id, originalCategory, targetCategory) => {      
-        var top = topTasks
-        var important = importantTasks
-        var other = otherTasks
+    const handleDrop = async (id, originalCategory, targetCategory) => {
+        var top = []
+        var important = []
+        var other = []      
+        if (topTasks[0] !== null) {
+            top = topTasks
+        }
+        
+        if (importantTasks[0] !== null) {
+            important = importantTasks
+            console.log("bugged")
+        }
+        if (otherTasks[0] !== null) {
+            other = otherTasks
+        }
 
         console.log("original", originalCategory)
         console.log("id", id)
@@ -238,7 +249,6 @@ function Homepage(){
                 important.splice(id, 1)
             }
         }
-
         const response = await fetch(url + '/api/tasks/' + username, {
             method: "PUT",
             body: JSON.stringify({
