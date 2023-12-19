@@ -8,7 +8,7 @@ import Sidebar from "../components/sidebar";
 import Navbar from "../components/navbar";
 // import FocusTime from "./focustime";
 import Appointment from "./appointments";
-
+import { useDateContext } from '../components/datecontext';
 
 function Homepage(){
     const url = process.env.REACT_APP_API_URL;
@@ -24,6 +24,7 @@ function Homepage(){
     const [topTasks, setTopTasks] = useState([])
     const [importantTasks, setImportantTasks] = useState([])
     const [otherTasks, setOtherTasks] = useState([])
+    const { isPlanned} = useDateContext();
 
     useEffect(() =>{
 
@@ -296,7 +297,7 @@ function Homepage(){
             .then(data => {setTopTasks(data.topTasks); setImportantTasks(data.importantTasks); setOtherTasks(data.otherTasks)})
             .catch((err) => console.log(err))
         }
-    }, [username, url])
+    }, [username, url, isPlanned])
 
     useEffect(() => {
         if (username !== null) {

@@ -23,18 +23,18 @@ function AppointmentContainer(props){
                     {props.isCont? (<>
                         {props.isEnd? (<>
                         {props.isBefore? (<>
-                            <Flex justifyContent={"center"} borderLeft={"2px solid #E2EAF1"} borderRight={"2px solid #E2EAF1"} borderBottom={"2px solid #E2EAF1"} _hover={{bg:"#E2EAF162"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
+                            <Flex justifyContent={"center"} borderLeft={"2px solid #E2EAF1"} borderRight={"2px solid #E2EAF1"} borderBottom={"2px solid #E2EAF1"} _hover={{bg:"#E2EAF162"}} width={"95%"} bg={"cont"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
                             </Flex>
                         </>):(<>
-                            <Flex justifyContent={"center"} borderLeft={"2px solid #6284FF"} borderRight={"2px solid #6284FF"} borderBottom={"2px solid #6284FF"} _hover={{bg:"#6284ff14"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
+                            <Flex justifyContent={"center"} borderLeft={"2px solid #6284FF"} borderRight={"2px solid #6284FF"} borderBottom={"2px solid #6284FF"} _hover={{bg:"#6284ff14"}} width={"95%"} bg={"cont"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
                             </Flex>
                         </>)}
                             
                         </>):(<>
                             {props.isBefore? (<>
-                            <Flex justifyContent={"center"} borderLeft={"2px solid #E2EAF1"} borderRight={"2px solid #E2EAF1"} _hover={{bg:"#E2EAF162"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
+                            <Flex justifyContent={"center"} borderLeft={"2px solid #E2EAF1"} borderRight={"2px solid #E2EAF1"} _hover={{bg:"#E2EAF162"}} width={"95%"} bg={"cont"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
                             </Flex></>):(<>
-                            <Flex justifyContent={"center"} borderLeft={"2px solid #6284FF"} borderRight={"2px solid #6284FF"} _hover={{bg:"#6284ff14"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
+                            <Flex justifyContent={"center"} borderLeft={"2px solid #6284FF"} borderRight={"2px solid #6284FF"} _hover={{bg:"#6284ff14"}} width={"95%"} bg={"cont"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
                             </Flex>
                             </>)} 
                         </>)
@@ -42,7 +42,7 @@ function AppointmentContainer(props){
                     </>)
                     :(<>
                     {props.isBefore? (<>
-                        <Flex justifyContent={"center"} border={"2px solid #E2EAF1"} _hover={{bg:"#E2EAF162"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
+                        <Flex justifyContent={"center"} border={"2px solid #E2EAF1"} _hover={{bg:"#E2EAF162"}} width={"95%"} bg={"cont"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
                             <Flex justifyContent={"flex-left"} alignItems={"center"} style={{ cursor: 'pointer' }} onClick={ () => props.handleFocus(props.title, props.notes, props.timers, props.compTimers, props.prio, props.index )}>
                                 <Heading margin={3} textAlign={"center"} fontSize={"14px"} fontWeight={"700"} fontFamily={"'DM Sans', sans-serif"}>
                                 Focus Time
@@ -59,7 +59,7 @@ function AppointmentContainer(props){
                             </Flex>
                         </Flex>
                     </>):(<>
-                        <Flex justifyContent={"center"} border={"2px solid #6284FF"} _hover={{bg:"#6284ff14"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
+                        <Flex justifyContent={"center"} border={"2px solid #6284FF"} _hover={{bg:"#6284ff14"}} width={"95%"} bg={"cont"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
                             <Flex justifyContent={"flex-left"} alignItems={"center"} style={{ cursor: 'pointer' }} onClick={ () => props.handleFocus(props.title, props.notes, props.timers, props.compTimers, props.prio, props.index )}>
                                 <Heading margin={3} textAlign={"center"} fontSize={"14px"} fontWeight={"700"} fontFamily={"'DM Sans', sans-serif"}>
                                 Focus Time
