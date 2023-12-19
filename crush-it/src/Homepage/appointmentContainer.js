@@ -13,32 +13,73 @@ function AppointmentContainer(props){
     // const bg = useColorModeValue('#F5F7F9', '#1A202C')
     const cont = useColorModeValue("white", "#2d3748")
     const passedFocus = useColorModeValue("#f3f6ff", "#243064") //use to gray out passed focus time
-
-
+    console.log(props.isFocus)
     return (
              <Td padding={0} width={"88%"} style={{ backgroundColor: `${cont}`}}>
                 
                 {props.isFocus? (
-                <Flex justifyContent={"center"} border={"2px solid #6284FF"} _hover={{bg:"#6284ff14"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
-                    <Flex justifyContent={"flex-left"} alignItems={"center"} style={{ cursor: 'pointer' }} onClick={onOpen}>
-                        <Heading margin={3} textAlign={"center"} fontSize={"14px"} fontWeight={"700"} fontFamily={"'DM Sans', sans-serif"}>
-                        Focus Time
-                        </Heading>
-                        <Box alignSelf={"center"} height="6px" width={"6px"} bg={"#6284FF"} rounded={100}></Box>
-                        <Heading margin={3} textAlign={"center"} fontSize={"14px"} fontWeight={"700"} fontFamily={"'DM Sans', sans-serif"}>
-                        {props.title}
-                        </Heading>
-                    </Flex>
-                    <Spacer></Spacer>
-                    <Flex justifyContent={"flex-end"} alignItems={"center"}  >
-                        <Icon as={IoHourglassOutline} margin={1} boxSize={"20px"} color={"#6284FF"} marginRight={"5px"} />
-                        <Heading   fontSize={"14px"}  margin={1} fontWeight={"700"} fontFamily={"'DM Sans', sans-serif"}>0/3</Heading>
-                        <Box width={"56px"} height={"26px"} borderRadius={"8px"} margin={1} justifyContent={"center"} alignItems={"center"} textAlign={"center"} background={"#6284ff1a"}>
-                            <Heading fontSize={"14px"} textColor={"#6284FF"}  margin={1} fontWeight={"700"} fontFamily={"'DM Sans', sans-serif"}>19:07</Heading>    
-                        </Box>
-                        <Icon  as={IoChevronDownCircleOutline} transform="rotate(270deg)" margin={1} boxSize={"20px"} marginRight={"5px"} />
-                    </Flex>
-                </Flex>
+                    <>
+                    
+                    {props.isCont? (<>
+                        {props.isEnd? (<>
+                        {props.isBefore? (<>
+                            <Flex justifyContent={"center"} borderLeft={"2px solid #E2EAF1"} borderRight={"2px solid #E2EAF1"} borderBottom={"2px solid #E2EAF1"} _hover={{bg:"#E2EAF162"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
+                            </Flex>
+                        </>):(<>
+                            <Flex justifyContent={"center"} borderLeft={"2px solid #6284FF"} borderRight={"2px solid #6284FF"} borderBottom={"2px solid #6284FF"} _hover={{bg:"#6284ff14"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
+                            </Flex>
+                        </>)}
+                            
+                        </>):(<>
+                            {props.isBefore? (<>
+                            <Flex justifyContent={"center"} borderLeft={"2px solid #E2EAF1"} borderRight={"2px solid #E2EAF1"} _hover={{bg:"#E2EAF162"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
+                            </Flex></>):(<>
+                            <Flex justifyContent={"center"} borderLeft={"2px solid #6284FF"} borderRight={"2px solid #6284FF"} _hover={{bg:"#6284ff14"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
+                            </Flex>
+                            </>)} 
+                        </>)
+                        }
+                    </>)
+                    :(<>
+                    {props.isBefore? (<>
+                        <Flex justifyContent={"center"} border={"2px solid #E2EAF1"} _hover={{bg:"#E2EAF162"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
+                            <Flex justifyContent={"flex-left"} alignItems={"center"} style={{ cursor: 'pointer' }} onClick={onOpen}>
+                                <Heading margin={3} textAlign={"center"} fontSize={"14px"} fontWeight={"700"} fontFamily={"'DM Sans', sans-serif"}>
+                                Focus Time
+                                </Heading>
+                                <Box alignSelf={"center"} height="6px" width={"6px"} bg={"#000000"} rounded={100}></Box>
+                                <Heading margin={3} textAlign={"center"} fontSize={"14px"} fontWeight={"700"} fontFamily={"'DM Sans', sans-serif"}>
+                                {props.title}
+                                </Heading>
+                            </Flex>
+                            <Spacer></Spacer>
+                            <Flex justifyContent={"flex-end"} alignItems={"center"}  >
+                                <Icon as={IoHourglassOutline} margin={1} boxSize={"20px"} color={"#000000"} marginRight={"5px"} />
+                                <Heading   fontSize={"14px"}  margin={1} fontWeight={"700"} marginRight={"20px"} fontFamily={"'DM Sans', sans-serif"}>0/3</Heading>
+                            </Flex>
+                        </Flex>
+                    </>):(<>
+                        <Flex justifyContent={"center"} border={"2px solid #6284FF"} _hover={{bg:"#6284ff14"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
+                            <Flex justifyContent={"flex-left"} alignItems={"center"} style={{ cursor: 'pointer' }} onClick={onOpen}>
+                                <Heading margin={3} textAlign={"center"} fontSize={"14px"} fontWeight={"700"} fontFamily={"'DM Sans', sans-serif"}>
+                                Focus Time
+                                </Heading>
+                                <Box alignSelf={"center"} height="6px" width={"6px"} bg={"#6284FF"} rounded={100}></Box>
+                                <Heading margin={3} textAlign={"center"} fontSize={"14px"} fontWeight={"700"} fontFamily={"'DM Sans', sans-serif"}>
+                                {props.title}
+                                </Heading>
+                            </Flex>
+                            <Spacer></Spacer>
+                            <Flex justifyContent={"flex-end"} alignItems={"center"}  >
+                                <Icon as={IoHourglassOutline} margin={1} boxSize={"20px"} color={"#6284FF"} marginRight={"5px"} />
+                                <Heading   fontSize={"14px"}  margin={1} fontWeight={"700"} marginRight={"20px"} fontFamily={"'DM Sans', sans-serif"}>0/3</Heading>
+                            </Flex>
+                        </Flex>
+                    </>)}
+                    </>)
+                        
+                    }
+                    </>   
                 ) : 
                 (
                     <>

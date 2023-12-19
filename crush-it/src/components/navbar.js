@@ -6,7 +6,7 @@ import { Flex, Input, Heading, Spacer, Button, Image, useColorModeValue} from '@
 import userIcon from '../media/userIcon.png';
 
  // Here, we display our Navbar
-export default function Navbar() {
+export default function Navbar( prop) {
     const url = process.env.REACT_APP_API_URL;
 
 
@@ -17,7 +17,7 @@ export default function Navbar() {
     const [user, setUser] = useState(null)
     const [userData, setUserData] = useState({});
     //console.log(userData);
-    console.log('showfile',showFile)
+    //console.log('showfile',showFile)
 
     const bg = useColorModeValue('white', '#1E1E1E')
     const text = useColorModeValue('black', 'white')
@@ -36,26 +36,43 @@ export default function Navbar() {
         }
     }, [location.pathname, navigate, url])
         
-
+    
     useEffect(() => {
         if(user) {
             fetch(url + "/api/user/" + user)
             .then(res => res.json())
             .then(data => {setUserData(data)})
             .catch((err) => console.log(err))
-
+        /*
             fetch(url + '/api/pic/' + user)
             .then(res => res.json())
             .then(data => {if(data.picture !== null) {setShowFile(data.picture)}})
-        }
+        }*/}
     })
 
-    useEffect(() => {
+    /*useEffect(() => {
 
-    }, [showFile])
+    }, [showFile])*/
 
   
     if (location.pathname === "/login" || location.pathname === "/signup"){
+        return null;
+    }
+
+
+    if(location.pathname === "/" || location.pathname === "/homepage"){
+        if(prop !== null && prop.homepage === true){
+            return (
+                <Flex as={"nav"} bg={bg} width={"100%"} height={"6vh" } alignItems={"center"} p={"20px"}>
+                <Input placeholder='What are you looking for?' width={"100vh"} mt={5} mb={5} />
+                <Spacer></Spacer>
+                <NavLink to={"/profile/" + user} >
+                <Button  data-testid="prof" leftIcon={<Image borderRadius='full' boxSize="40px" src={showFile} display='fixed'/>} variant={"ghost"} colorScheme="linkedin" bg={bg} color={text}>{userData.fname} {userData.lname}</Button>
+                </NavLink>
+            </Flex>
+            )
+        }
+        else
         return null;
     }
 
