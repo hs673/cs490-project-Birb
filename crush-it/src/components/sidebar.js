@@ -11,8 +11,7 @@ import logOutIcon from '../media/logout.png'
 export default function Sidebar(prop) {
   const url = process.env.REACT_APP_API_URL;
 
-  const { isCurrentDate } = useDateContext();
-  console.log("sidebarDate", isCurrentDate)
+  const { isCurrentDate, setAsPlanned, isPlanned} = useDateContext();
 
   const bg = useColorModeValue('#252628', '#1E1E1E')
 
@@ -32,6 +31,10 @@ export default function Sidebar(prop) {
   const [importantTasks, setImportantTasks] = useState([])
   const [otherTasks, setOtherTasks] = useState([])
   const [flag, setFlag] = useState(false);
+
+
+  // const [isPlanned, setIsPlanned] = useState(false);
+
 
   useLayoutEffect(() => {
     if (location.pathname !== "/login" && location.pathname !== "/signup") {
@@ -56,6 +59,19 @@ export default function Sidebar(prop) {
           .catch((err) => console.log(err))
       }
   }, [username, url])
+
+  // set isPlanned to true if it is already planned for the day
+  useEffect(() => {
+    if (username !== null) {
+      fetch(url + "/api/appointments/" + username)
+      .then(res => res.json())
+      .then(data => {
+        setAsPlanned(data.isPlanned)
+      })
+      .catch((err) => console.log(err))
+    }
+  }, [url, username])
+
 
   function compareDateStrings(dateString1, dateString2) {
     const date1 = new Date(dateString1);
@@ -95,6 +111,9 @@ export default function Sidebar(prop) {
     var importantFlag = false;
     if (topTasks[0] !== null) {
       topTasks.forEach(task => {
+        if(task!= null && task.dateAssigned === currentDate){
+          topCounter++;
+        }
         if (task !== null && task.dateAssigned === tempPrevDate && (task.status === 'NS' || task.status === 'IP')) {
           topCounter++;
           temp = {...task};
@@ -166,6 +185,17 @@ export default function Sidebar(prop) {
 
     // plan day is clicked
     if (flag){
+      fetch(url + "/api/appointments/" + username, {
+        method: "PUT",
+        body: JSON.stringify({
+            date: String(currentDate),
+            isPlanned: true
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .catch((err) => console.log(err))
       console.log(tempTopTasks)
       fetch(url + '/api/tasks/' + username, {
           method: "PUT",
@@ -191,9 +221,14 @@ export default function Sidebar(prop) {
 
   }, [topTasks, importantTasks, otherTasks, url]);
 
-  const handlePlanDay = async () => {
-    setFlag(true);
+  useEffect(() => {
 
+  }, [isPlanned])
+
+  const handlePlanDay = async (e) => {
+    e.preventDefault()
+    setFlag(true);
+    setAsPlanned(true)
     // fetch tasks and assign previous day's to today's
     console.log('today is ' + currentDate + ', yesterday was ' + prevDate);
 
@@ -216,7 +251,7 @@ export default function Sidebar(prop) {
   }
 
   if ((location.pathname === "/" || location.pathname === "/homepage") ){ // load plan day button if it is homepage
-    if( prop !== null && prop.homepage == true){
+    if( prop !== null && prop.homepage === true){
       return (
         <VStack align="start" height={"100vh"} width="200px" spacing={4} p={4} bg={bg} alignItems={"center"}>
           <NavLink data-testid="home" to="/">
@@ -228,7 +263,7 @@ export default function Sidebar(prop) {
           <Image textColor="white" src="/smallLogo.svg" alt="SVG Image" />
           
           <Text fontFamily={"'DM Sans', sans-serif"} textAlign={"center"} fontSize={"20px"} textColor={"white"} fontWeight={"700"}>It's time to plan your day!</Text>
-          <Button data-testid="planDay" fontFamily={"'DM Sans', sans-serif"} height={"54px"} borderRadius={"14px"} variant="outline" color={"white"} fontSize={"18px"} fontWeight={"700"} width={"160px"} isDisabled={location.pathname !== "/" || !isCurrentDate } onClick={handlePlanDay}>Plan Day</Button>
+          <Button data-testid="planDay" fontFamily={"'DM Sans', sans-serif"} height={"54px"} borderRadius={"14px"} variant="outline" color={"white"} fontSize={"18px"} fontWeight={"700"} width={"160px"} isDisabled={location.pathname !== "/" || !isCurrentDate || isPlanned } onClick={handlePlanDay}>Plan Day</Button>
   
           <Spacer></Spacer>
   

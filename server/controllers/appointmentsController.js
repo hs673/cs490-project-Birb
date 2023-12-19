@@ -21,18 +21,10 @@ const updateAppointments = async (req, res) => {
     const isPlanned = req.body.isPlanned;
 
     try {
-        const userAppointments = await Appointment.findOne({ username: username });
+        const userAppointments = await Appointment.findOneAndUpdate({ username: username }, {username: username,date: date, isPlanned: isPlanned});
         if (!userAppointments) {
             return res.status(404).json({ error: 'User not found' });
-        }
-        userAppointments = {
-            username: username,
-            date: date,
-            isPlanned: isPlanned,
-        }
-        await userAppointments.save();
-        return res.json(userAppointments);
-        
+        }        
         
     } catch (error) {
         console.log(error)

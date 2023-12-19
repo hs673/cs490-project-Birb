@@ -19,13 +19,14 @@ function DatePicker({onDateSelected}) {
     const [selectedYear, setSelectedYear] = useState(curYear);
 
     //selected date = today
-    const { setAsCurrentDate } = useDateContext();
+    const { setAsCurrentDate, setAsGreaterCurrentDate } = useDateContext();
 
     const isCurrentDate = (
       selectedMonth === curMonth &&
       selectedDate === curDate &&
       selectedYear === curYear
     );
+    setAsGreaterCurrentDate(selectedYear > curYear || (selectedYear === curYear && selectedMonth > curMonth) || (selectedYear === curYear && selectedMonth === curMonth && selectedDate > curDate))
 
     console.log("isToday", isCurrentDate)
 

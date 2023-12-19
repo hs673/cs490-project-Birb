@@ -16,7 +16,6 @@ import subSqr from '../media/minus-square.svg'
 
 //creates a swapable icon on the left side of the screen
 function EditableIcon( txt, handleUpdatedIcon, category, i, title ){
-    console.log(txt)
     //const [currentIcon, setCurrentIcon] = useState(txt);
     var currentIcon = txt;
     function setCurrentIcon (text){
@@ -259,7 +258,6 @@ function TaskContainer(props) {
     
     
     for (let i = 0; i < indices.length; i++){
-      console.log("in Create card",list[i][3])
         cards.push(
         
             <Card borderRadius={"8"} key={i} margin={2} padding={3}  draggable={true} onDragStart={(e) => onDragStart(e, indices[i], props.category, props.categoryList)}>

@@ -210,7 +210,6 @@ function Homepage(){
         
         if (importantTasks[0] !== null) {
             important = importantTasks
-            console.log("bugged")
         }
         if (otherTasks[0] !== null) {
             other = otherTasks
@@ -307,6 +306,39 @@ function Homepage(){
             .catch((err) => console.log(err))
         }
     }, [username, url])
+
+    useEffect(() => {
+        const todayDate = new Date();
+        const curMonth = todayDate.toLocaleString('default', { month: 'long' });
+        const curDate = todayDate.getDate();
+        const curYear = todayDate.getFullYear();
+        const currentDate = curDate.toString() + "-" + curMonth.toString()+"-"+curYear.toString();
+        if (username !== null) {
+            fetch(url + '/api/appointments/' + username)
+            .then(res => res.json())
+            .then(data => {
+                if (currentDate !== data.date) {
+                    fetch(url + "/api/appointments/" + username, {
+                        method: "PUT",
+                        body: JSON.stringify({
+                            date: String(currentDate),
+                            isPlanned: false
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .catch((err) => console.log(err))
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+        }
+    })
+    
+
 
     
     // const topPriorityList = [["Complete Math Homework", "This is a hw", 1, "FN" ], ["Homework 2","This is a hw", 3, "NS"]];

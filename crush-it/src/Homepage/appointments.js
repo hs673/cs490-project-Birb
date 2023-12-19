@@ -3,6 +3,7 @@ import {Box, Table, Tbody, TableContainer, Tr, Td, useColorModeValue, useDisclos
 import AppointmentContainer from "./appointmentContainer";
 import {parse, format, addDays, parseISO, getHours, getMinutes, setHours, setMinutes, setSeconds, setMilliseconds} from 'date-fns';
 import FocusTime from "./focustime";
+import { useDateContext } from '../components/datecontext';
 
 function Appointment(props){
     const url = process.env.REACT_APP_API_URL;
@@ -11,10 +12,10 @@ function Appointment(props){
     const cont = useColorModeValue("white", "#2d3748")
     const username = props.username;
     const [timer, setTimer] = useState(null)
-    console.log( "appointments gets props list", props.topList, props.importantList, props.otherList)
+    // console.log( "appointments gets props list", props.topList, props.importantList, props.otherList)
     // data = raw data from the google calendar api for the selected day
     const [data, setData] = useState(null);
-    const [appointmentData, setAppointmentData] = useState(null);
+    // const [appointmentData, setAppointmentData] = useState(null);
     //console.log(appointmentData);
     // ** FOR GUI **
     // events with relevant information from google calendar are stored here => check the second useEffect 
@@ -33,16 +34,16 @@ function Appointment(props){
     //fill list with tasks to do today (do not use 0, use military time (1-24) and the function will convert to regular time)
     //title = string, isFocus = bool,
 
-    useEffect(() => {
-        if (username !== null) {
-            fetch(url + '/api/appointments/' + username)
-            .then(res => res.json())
-            .then(data => {console.log("wtf"); setAppointmentData(data)})
-            .catch((err) => {
-                console.log(err);
-            })
-        }
-    }, []) 
+    // useEffect(() => {
+    //     if (username !== null) {
+    //         fetch(url + '/api/appointments/' + username)
+    //         .then(res => res.json())
+    //         .then(data => {setAppointmentData(data)})
+    //         .catch((err) => {
+    //             console.log(err);
+    //         })
+    //     }
+    // }, []) 
 
     useEffect(() => {
         if (username !== null) {
@@ -141,7 +142,6 @@ function Appointment(props){
             .then(dataReturn => {setData(dataReturn)})
             .catch((err) => console.log(err));  
             
-            console.log(data)
         }
     }, [props.username, props.selectedDate, url])
     
@@ -192,7 +192,7 @@ function Appointment(props){
                     }>
         <TableContainer>
            
-                {CreateTable(list, events, props.topList, props.otherList, props.importantList, props.selectedDate, timer, props.handleCompletedChange)}
+                {CreateTable(list, events, props.topList, props.otherList, props.importantList, props.selectedDate, timer, props.handleCompletedChange, username, props.selectedDate)}
                 
             
         </TableContainer>
@@ -203,8 +203,8 @@ function Appointment(props){
 }
 
 
-function CreateTable(list, events, topList, otherList, importantList, date, time, handleCompletedChange){
-
+function CreateTable(list, events, topList, otherList, importantList, date, time, handleCompletedChange, username, selectedDate){
+    const url = process.env.REACT_APP_API_URL;
     var child = []
     const { isOpen, onOpen, onClose } = useDisclosure();
     //timers={focusPomo} completedTimers={focusCompletedPomo}
@@ -216,6 +216,17 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
     const [focusIndex, setFocusIndex] = useState('');
 
     const [currentTime, setCurrentTime] = useState(new Date());
+    // const [isPlanned, setIsPlanned] = useState(false);
+    const { isGreaterCurrentDate, isCurrentDate, isPlanned} = useDateContext();
+    const [app, setApp] = useState(false);
+
+    useEffect(() => {
+      if (isGreaterCurrentDate || isCurrentDate) {
+        setApp(false)
+      } else {
+        setApp(true)
+      }
+    }, [isGreaterCurrentDate, isCurrentDate])
 
     useEffect(() => {
         // Update current time every minute
@@ -259,18 +270,43 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                 
                 x+=1;
             }
-        }
-        
+        } 
+    }
+
+            // DISABLE PLAN DAY BUTTON (if isPlanned === false, do not load this.)
+    // if it is a previous day, load, if its in the future do not load
+
+        // set isPlanned for the current day to false if the day in the database is not the current day.
+
+    // const todayDate = new Date();
+    // const curMonth = todayDate.toLocaleString('default', { month: 'long' });
+    // const curDate = todayDate.getDate();
+    // const curYear = todayDate.getFullYear();
+    // const currentDate = curDate.toString() + "-" + curMonth.toString()+"-"+curYear.toString();
+    
+    // useEffect(() => {
+    //     if (username !== null) {
+    //         console.log('currentDate', currentDate)
+    //         fetch(url + "/api/appointments/" + username)
+    //         .then(res => res.json())
+    //         .then(data => {setIsPlanned(data.isPlanned)})
+    //         .catch((err) => console.log(err))
+    //     }
+    // })
+    useEffect(() => {
+
+    }, [isPlanned])
+
+    if ((isPlanned && isCurrentDate) || app) {
         //adding focustime
+        
         var topCounter = 0;
         if(topList[0] !== null){
         topList.forEach(task => {
-            
             if(task.dateAssigned === date){
-                console.log("task builder",task)
                 //calculate time
                 //console.log("task time", (task.pomodoroTimers * time))
-               var compTime = task.pomodoroTimers * time/60.0
+            var compTime = task.pomodoroTimers * time/60.0
                 for(var i = 11; i < 40; i++ ){
                     if(list[i].length === 0 && compTime >0){ // 7 == timers, 8== complete 9 == prio 10 = index
                         list[i] = [task.title, true, task.description, i,i,i,i, task.pomodoroTimers, task.completedPomodoroTimers, "Top Priority", topCounter ];
@@ -286,7 +322,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
         importantList.forEach(task => {
             if(task.dateAssigned === date){
                 //console.log("task builder",task.dateAssigned)
-                console.log("task time", (task.pomodoroTimers * time/60.0))
+                // console.log("task time", (task.pomodoroTimers * time/60.0))
                 var compTime = task.pomodoroTimers * time/60.0
                 for(var i = 11; i < 40; i++ ){
                     if(list[i].length === 0 && compTime >0){
@@ -304,7 +340,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
         otherList.forEach(task => {
             if(task.dateAssigned === date){
                 //console.log("task builder",task.dateAssigned)
-                console.log("task time", (task.pomodoroTimers * time/60.0))
+                // console.log("task time", (task.pomodoroTimers * time/60.0))
                 var compTime = task.pomodoroTimers * time/60.0
                 for(var i = 11; i < 40; i++ ){
                     if(list[i].length === 0 && compTime >0){
@@ -316,11 +352,13 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
             }
         });
         }
-        
-
     }
 
-    console.log(list)
+        
+
+    
+
+    // console.log(list)
     var boolIsEnd = false;
     var boolIsCont = false;
     var lastT = "";

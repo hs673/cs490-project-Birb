@@ -48,7 +48,7 @@ export default function Navbar( prop) {
             .then(res => res.json())
             .then(data => {if(data.picture !== null) {setShowFile(data.picture)}})
         }
-    })
+    }, [user])
 
     /*useEffect(() => {
 
