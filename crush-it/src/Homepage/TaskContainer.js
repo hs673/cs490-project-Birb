@@ -241,9 +241,9 @@ function TaskContainer(props) {
       }
     }
     var cards = []
-    console.log(props.category)
-    console.log("List:"+ list.toString())
-    console.log("Index:" + indices.toString())
+    //console.log(props.category)
+   // console.log("List:"+ list.toString())
+    //console.log("Index:" + indices.toString())
 
     function onDragStart(ev, i, category, categoryList) {
       //console.log("dragstart", i)

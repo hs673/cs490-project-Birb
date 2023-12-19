@@ -1,9 +1,11 @@
 import React, {useLayoutEffect, useState, useEffect} from "react";
 import { useNavigate } from "react-router";
-import {Box, Heading, Container, VStack, HStack, useColorModeValue, Spacer} from '@chakra-ui/react';
+import {Box, Heading, Container, VStack, HStack,Flex, useColorModeValue, Spacer} from '@chakra-ui/react';
 import TaskContainer from "./TaskContainer"
 import DatePicker from './datepicker';
 import AddTask from './addtask';
+import Sidebar from "../components/sidebar";
+import Navbar from "../components/navbar";
 // import FocusTime from "./focustime";
 import Appointment from "./appointments";
 
@@ -195,10 +197,21 @@ function Homepage(){
     }
 
 
-    const handleDrop = async (id, originalCategory, targetCategory) => {      
-        var top = topTasks
-        var important = importantTasks
-        var other = otherTasks
+    const handleDrop = async (id, originalCategory, targetCategory) => {
+        var top = []
+        var important = []
+        var other = []      
+        if (topTasks[0] !== null) {
+            top = topTasks
+        }
+        
+        if (importantTasks[0] !== null) {
+            important = importantTasks
+            console.log("bugged")
+        }
+        if (otherTasks[0] !== null) {
+            other = otherTasks
+        }
 
         console.log("original", originalCategory)
         console.log("id", id)
@@ -233,7 +246,6 @@ function Homepage(){
                 important.splice(id, 1)
             }
         }
-
         const response = await fetch(url + '/api/tasks/' + username, {
             method: "PUT",
             body: JSON.stringify({
@@ -296,7 +308,10 @@ function Homepage(){
     // const otherList = [["Homework 4", "", 10, "IP" ], ["Homework 3","", 3, "MO"]];
 
     return (
-      
+        <Flex>
+        <Sidebar  homepage={true} />
+         <Box flex="1">
+           <Navbar homepage={true} />
 
         <Box p={5} bg={bg} height={"94vh"}>
         <DatePicker onDateSelected={handleSelected} />
@@ -323,13 +338,15 @@ function Homepage(){
               
               </Heading>
 
-            <Appointment username={username} selectedDate={selectedDate}></Appointment>
+            <Appointment username={username} topList={topTasks} otherList={otherTasks} importantList={importantTasks} selectedDate={selectedDate}></Appointment>
   
           </VStack>
   
       </HStack>
   
   </Box>
+  </Box>
+     </Flex>
   )
     
 }

@@ -8,7 +8,7 @@ import { NavLink,useLocation } from "react-router-dom";
 import { Box, VStack, Text, Button, Image, Spacer, useColorModeValue} from "@chakra-ui/react";
 import logOutIcon from '../media/logout.png'
  // Here, we display our Navbar
-export default function Sidebar() {
+export default function Sidebar(prop) {
   const url = process.env.REACT_APP_API_URL;
 
   const { isCurrentDate } = useDateContext();
@@ -206,11 +206,37 @@ export default function Sidebar() {
       return null;
   }
 
+  if ((location.pathname === "/" || location.pathname === "/homepage") ){ // load plan day button if it is homepage
+    if( prop !== null && prop.homepage == true){
       return (
+        <VStack align="start" height={"100vh"} width="200px" spacing={4} p={4} bg={bg} alignItems={"center"}>
+          <NavLink data-testid="home" to="/">
+            <Text fontFamily={"'Fredoka', sans-serif"} fontSize="30px" fontWeight={"400"} textColor={"white"} align={"center"} >Crush It</Text>
+          </NavLink>
+          
+          <Box height={"1px"} width={"160px"} bg={"#3E3F42"}></Box>
+  
+          <Image textColor="white" src="/smallLogo.svg" alt="SVG Image" />
+          
+          <Text fontFamily={"'DM Sans', sans-serif"} textAlign={"center"} fontSize={"20px"} textColor={"white"} fontWeight={"700"}>It's time to plan your day!</Text>
+          <Button data-testid="planDay" fontFamily={"'DM Sans', sans-serif"} height={"54px"} borderRadius={"14px"} variant="outline" color={"white"} fontSize={"18px"} fontWeight={"700"} width={"160px"} isDisabled={location.pathname !== "/" || !isCurrentDate } onClick={handlePlanDay}>Plan Day</Button>
+  
+          <Spacer></Spacer>
+  
+          <Button data-testid="logout" fontFamily={"'DM Sans', sans-serif"} leftIcon={<Image borderRadius='full' boxSize="24px" src={logOutIcon} display='fixed'/>} onClick={handleLogout} fontSize={"12px"} borderRadius={"10px"} bg="#252628" variant={"outline"} textColor={"white"} margin={"14"} w={"120px"} h="38">
+            Log Out
+          </Button>
+        </VStack>
+      );
+    }
+    else{
+      return null;
+    }
+    
+    
+}
 
-
-
-        
+      return (
         <VStack align="start" height={"100vh"} width="200px" spacing={4} p={4} bg={bg} alignItems={"center"}>
           <NavLink data-testid="home" to="/">
             <Text fontFamily={"'Fredoka', sans-serif"} fontSize="30px" fontWeight={"400"} textColor={"white"} align={"center"} >Crush It</Text>
@@ -221,8 +247,6 @@ export default function Sidebar() {
           <Image textColor="white" src="/smallLogo.svg" alt="SVG Image" />
           
           <Text fontFamily={"'DM Sans', sans-serif"} textAlign={"center"} fontSize={"20px"} textColor={"white"} fontWeight={"700"}>It's time to plan your day!</Text>
-          <Button data-testid="planDay" fontFamily={"'DM Sans', sans-serif"} height={"54px"} borderRadius={"14px"} variant="outline" color={"white"} fontSize={"18px"} fontWeight={"700"} width={"160px"} isDisabled={location.pathname !== "/" || !isCurrentDate } onClick={handlePlanDay}>Plan Day</Button>
-
           <Spacer></Spacer>
 
           <Button data-testid="logout" fontFamily={"'DM Sans', sans-serif"} leftIcon={<Image borderRadius='full' boxSize="24px" src={logOutIcon} display='fixed'/>} onClick={handleLogout} fontSize={"12px"} borderRadius={"10px"} bg="#252628" variant={"outline"} textColor={"white"} margin={"14"} w={"120px"} h="38">
