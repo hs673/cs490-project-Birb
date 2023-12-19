@@ -286,6 +286,9 @@ function Homepage(){
         .then(data => data.isLoggedIn ? setUsername(data.username): navigate('/login'))
         .catch((err) => console.log(err))
     }, [navigate, url])
+
+
+
     //status is broken into 4 different elements notStarted="NS", Finished="FN", InProgress="IP", Canceled="anything", movedOver="MO" 
     useEffect(() => {
         if (username !== null) {

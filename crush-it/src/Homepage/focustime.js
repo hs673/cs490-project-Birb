@@ -26,6 +26,10 @@ function FocusTime({isOpen, onClose, title, notes, timers, completedTimers, hand
     const [timeLeft, setTimeLeft] = useState(-1);
     const [finishAt, setFinishAt] = useState('');
     const [flag, setFlag] = useState(false);
+
+    useEffect(() => {
+
+    }, [completedTimers])
     
     function handleOnClose(){
       handleTabChange(0);
