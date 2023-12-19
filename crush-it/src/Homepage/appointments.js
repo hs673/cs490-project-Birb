@@ -257,49 +257,55 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
         }
         
         //adding focustime
-        topList.forEach(task => {
-            if(task.dateAssigned === date){
-                //console.log("task builder",task.dateAssigned)
-                //calculate time
-                //console.log("task time", (task.pomodoroTimers * time))
-               var compTime = task.pomodoroTimers * time/60.0
-                for(var i = 11; i < 40; i++ ){
-                    if(list[i].length === 0 && compTime >0){
-                        list[i] = [task.title, true, task.description, i,i,i,i];
-                        compTime -= .5
+        if (topList[0] !== null) {
+            topList.forEach(task => {
+                if(task.dateAssigned === date){
+                    //console.log("task builder",task.dateAssigned)
+                    //calculate time
+                    //console.log("task time", (task.pomodoroTimers * time))
+                   var compTime = task.pomodoroTimers * time/60.0
+                    for(var i = 11; i < 40; i++ ){
+                        if(list[i].length === 0 && compTime >0){
+                            list[i] = [task.title, true, task.description, i,i,i,i];
+                            compTime -= .5
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
-       importantList.forEach(task => {
-            if(task.dateAssigned === date){
-                //console.log("task builder",task.dateAssigned)
-                console.log("task time", (task.pomodoroTimers * time/60.0))
-                var compTime = task.pomodoroTimers * time/60.0
-                for(var i = 11; i < 40; i++ ){
-                    if(list[i].length === 0 && compTime >0){
-                        list[i] = [task.title, true, task.description, i,i,i,i];
-                        compTime -= .5
-                        
+        if (importantList[0] !== null) {
+            importantList.forEach(task => {
+                if(task.dateAssigned === date){
+                    //console.log("task builder",task.dateAssigned)
+                    console.log("task time", (task.pomodoroTimers * time/60.0))
+                    var compTime = task.pomodoroTimers * time/60.0
+                    for(var i = 11; i < 40; i++ ){
+                        if(list[i].length === 0 && compTime >0){
+                            list[i] = [task.title, true, task.description, i,i,i,i];
+                            compTime -= .5
+                            
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
-        otherList.forEach(task => {
-            if(task.dateAssigned === date){
-                //console.log("task builder",task.dateAssigned)
-                console.log("task time", (task.pomodoroTimers * time/60.0))
-                var compTime = task.pomodoroTimers * time/60.0
-                for(var i = 11; i < 40; i++ ){
-                    if(list[i].length === 0 && compTime >0){
-                        list[i] = [task.title, true, task.description, i,i,i,i];
-                        compTime -= .5
+        if (otherList[0] !== null) {
+            otherList.forEach(task => {
+                if(task.dateAssigned === date){
+                    //console.log("task builder",task.dateAssigned)
+                    console.log("task time", (task.pomodoroTimers * time/60.0))
+                    var compTime = task.pomodoroTimers * time/60.0
+                    for(var i = 11; i < 40; i++ ){
+                        if(list[i].length === 0 && compTime >0){
+                            list[i] = [task.title, true, task.description, i,i,i,i];
+                            compTime -= .5
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
         
 
     }
