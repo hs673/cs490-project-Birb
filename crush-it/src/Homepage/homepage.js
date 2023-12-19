@@ -25,7 +25,9 @@ function Homepage(){
     const [importantTasks, setImportantTasks] = useState([])
     const [otherTasks, setOtherTasks] = useState([])
 
-    
+    useEffect(() =>{
+
+    }, [topTasks, importantTasks, otherTasks])
     //handle the date change
     const handleSelected = (date) => {
         setSelectedDate (date)  
@@ -152,13 +154,14 @@ function Homepage(){
         if (!response.ok) {
             console.log(response)
         } else {
-            setTopTasks(top)
+            handleTop(top)
             handleImportant(important)
             handleOther(other)
         }
     }
 
     const handleCompletedChange = async (completed, category, i) => {
+        console.log("handle Completed: ",completed,category,i)
         var edit = null 
         var top = topTasks
         var important = importantTasks
@@ -190,7 +193,7 @@ function Homepage(){
         if (!response.ok) {
             console.log(response)
         } else {
-            setTopTasks(top)
+            handleTop(top)
             handleImportant(important)
             handleOther(other)
         }
@@ -338,7 +341,7 @@ function Homepage(){
               
               </Heading>
 
-            <Appointment username={username} topList={topTasks} otherList={otherTasks} importantList={importantTasks} selectedDate={selectedDate}></Appointment>
+            <Appointment username={username} topList={topTasks} otherList={otherTasks} importantList={importantTasks} selectedDate={selectedDate} handleCompletedChange={handleCompletedChange}> </Appointment>
   
           </VStack>
   
