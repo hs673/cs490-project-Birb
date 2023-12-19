@@ -49,9 +49,11 @@ export default function Navbar( prop) {
 
 
     useEffect(() => {
-        fetch(url + '/api/pic/' + user)
-        .then(res => res.json())
-        .then(data => {if(data.picture !== null) {setShowFile(data.picture)}})
+        if (user) {
+            fetch(url + '/api/pic/' + user)
+            .then(res => res.json())
+            .then(data => {if(data.picture !== null) {setShowFile(data.picture)}})
+        }
     })
 
   

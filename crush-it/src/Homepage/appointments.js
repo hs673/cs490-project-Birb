@@ -248,7 +248,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
         //start with Google calendar events
         for(var i = 0; i < events.length; i++){
             //is event at 30 min mark or more?
-            if(events[i][4]>=30){
+            if(events[i][4]>30){
                 list[parseInt( events[i][3],10)*2] = events[i]
             }
             else{//if not mark as starting at the hour
