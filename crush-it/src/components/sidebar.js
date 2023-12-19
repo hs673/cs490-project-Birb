@@ -93,66 +93,75 @@ export default function Sidebar(prop) {
     var tempOtherTasks = otherTasks;
     var topCounter = 0;
     var importantFlag = false;
-    topTasks.forEach(task => {
-      if (task !== null && task.dateAssigned === tempPrevDate && (task.status === 'NS' || task.status === 'IP')) {
-        topCounter++;
-        temp = {...task};
-        temp.dateAssigned = currentDate;
-        temp.completedPomodoroTimers = 0;
-        temp.status = 'NS';
-        delete temp._id;
-        task.status = 'MO';
-        if (topCounter <= 3) {
-          tempTopTasks.push(temp);
-        } else {
-          temp.priority = 'Important';
-          tempImportantTasks.push(temp);
+    if (topTasks[0] !== null) {
+      topTasks.forEach(task => {
+        if (task !== null && task.dateAssigned === tempPrevDate && (task.status === 'NS' || task.status === 'IP')) {
+          topCounter++;
+          temp = {...task};
+          temp.dateAssigned = currentDate;
+          temp.completedPomodoroTimers = 0;
+          temp.status = 'NS';
+          delete temp._id;
+          task.status = 'MO';
+          if (topCounter <= 3) {
+            tempTopTasks.push(temp);
+          } else {
+            temp.priority = 'Important';
+            tempImportantTasks.push(temp);
+          }
         }
-      }
-    });
-    setTopTasks(tempTopTasks);
-    // important loop
-    importantTasks.forEach(task => {
-      if (task !== null && task.dateAssigned === tempPrevDate && (task.status === 'NS' || task.status === 'IP') ) {
-        topCounter++;
-        temp = {...task};
-        temp.dateAssigned = currentDate;
-        temp.completedPomodoroTimers = 0;
-        temp.status = 'NS';
-        delete temp._id;
-        task.status = 'MO';
-        if (topCounter <= 3) {
-          temp.priority = 'Top';
-          tempTopTasks.push(temp);
-        } else {
-          importantFlag = true;
-          tempImportantTasks.push(temp);
+      });
+      setTopTasks(tempTopTasks);
+    }
+
+    if (importantTasks[0] !== null) {
+      // important loop
+      importantTasks.forEach(task => {
+        if (task !== null && task.dateAssigned === tempPrevDate && (task.status === 'NS' || task.status === 'IP') ) {
+          topCounter++;
+          temp = {...task};
+          temp.dateAssigned = currentDate;
+          temp.completedPomodoroTimers = 0;
+          temp.status = 'NS';
+          delete temp._id;
+          task.status = 'MO';
+          if (topCounter <= 3) {
+            temp.priority = 'Top';
+            tempTopTasks.push(temp);
+          } else {
+            importantFlag = true;
+            tempImportantTasks.push(temp);
+          }
         }
-      }
-    });
-    setImportantTasks(tempImportantTasks);
-    // other loop
-    otherTasks.forEach(task => {
-      if (task !== null && task.dateAssigned === tempPrevDate && (task.status === 'NS' || task.status === 'IP') ) {
-        topCounter++;
-        temp = {...task};
-        temp.dateAssigned = currentDate;
-        temp.completedPomodoroTimers = 0;
-        temp.status = 'NS';
-        delete temp._id;
-        task.status = 'MO';
-        if (topCounter <= 3) {
-          temp.priority = 'Top';
-          tempTopTasks.push(temp);
-        } else if (!importantFlag){
-          temp.priority = 'Important';
-          tempImportantTasks.push(temp);
-        } else {
-          tempOtherTasks.push(temp);
+      });
+      setImportantTasks(tempImportantTasks);
+    }
+
+    if (otherTasks[0] !== null) {
+      // other loop
+      otherTasks.forEach(task => {
+        if (task !== null && task.dateAssigned === tempPrevDate && (task.status === 'NS' || task.status === 'IP') ) {
+          topCounter++;
+          temp = {...task};
+          temp.dateAssigned = currentDate;
+          temp.completedPomodoroTimers = 0;
+          temp.status = 'NS';
+          delete temp._id;
+          task.status = 'MO';
+          if (topCounter <= 3) {
+            temp.priority = 'Top';
+            tempTopTasks.push(temp);
+          } else if (!importantFlag){
+            temp.priority = 'Important';
+            tempImportantTasks.push(temp);
+          } else {
+            tempOtherTasks.push(temp);
+          }
         }
-      }
-    });
-    setOtherTasks(tempOtherTasks);
+      });
+      setOtherTasks(tempOtherTasks);
+    }
+
     console.log('all tasks', tempTopTasks, tempImportantTasks, tempOtherTasks);
 
     // plan day is clicked
