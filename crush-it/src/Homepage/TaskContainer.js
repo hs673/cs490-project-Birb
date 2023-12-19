@@ -15,8 +15,13 @@ import subSqr from '../media/minus-square.svg'
 
 
 //creates a swapable icon on the left side of the screen
-function EditableIcon( txt, handleUpdatedIcon, category, i ){
-    const [currentIcon, setCurrentIcon] = useState(txt);
+function EditableIcon( txt, handleUpdatedIcon, category, i, title ){
+    console.log(txt)
+    //const [currentIcon, setCurrentIcon] = useState(txt);
+    var currentIcon = txt;
+    function setCurrentIcon (text){
+      currentIcon = text
+    }
     const hv = useColorModeValue("#F3F3F3", "#1a202c");
 
     const { colorMode } = useColorMode();
@@ -44,7 +49,6 @@ function EditableIcon( txt, handleUpdatedIcon, category, i ){
         setCurrentIcon(newIcon)
         handleUpdatedIcon(newIcon, category, i)
       };
-
       return(
         
             currentIcon === 'NS'
@@ -253,8 +257,9 @@ function TaskContainer(props) {
     }
 
     
-
+    
     for (let i = 0; i < indices.length; i++){
+      console.log("in Create card",list[i][3])
         cards.push(
         
             <Card borderRadius={"8"} key={i} margin={2} padding={3}  draggable={true} onDragStart={(e) => onDragStart(e, indices[i], props.category, props.categoryList)}>
@@ -267,7 +272,7 @@ function TaskContainer(props) {
                             <>
                               <Box as="span" flex='1' textAlign='left'>
                                 <Flex  justifyContent={"flex-left"} alignItems={"top"}>
-                                {EditableIcon(list[i][3], props.handleUpdatedIcon, props.category, indices[i])}
+                                {EditableIcon(list[i][3], props.handleUpdatedIcon, props.category, indices[i], list[i][0])}
                                 <Heading _hover={{bg:"#6284ff14"}} style={{ cursor: 'pointer' }} onClick={() =>handleFocus( list[i][0], list[i][1], list[i][2], list[i][4], indices[i])} fontWeight={"700"} fontSize={"16px"} textColor={hd} fontFamily={"'DM Sans', sans-serif"}>{list[i][0]}</Heading>
                                 </Flex>
                               </Box>
