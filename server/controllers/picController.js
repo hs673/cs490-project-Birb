@@ -9,6 +9,7 @@ const createPic = async (req, res) => {
             username: username,
             picture: null
         })
+       // console.log("creating user")
         res.status(200).json(image);
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -19,6 +20,8 @@ const createPic = async (req, res) => {
 const updatePic = async (req, res) => {
     const username = req.params.id;
     const imageName = req.body.selectedFile;
+    console.log(imageName)
+    console.log(String(imageName))
     const image = {
         username: username,
         picture: String(imageName)
@@ -28,10 +31,11 @@ const updatePic = async (req, res) => {
         if (!userPic) {
             return res.status(404).json({ error: 'User not found' });
         }
-        // If the appointment for the given date exists, update the existing entry
-        res.json(image);
+        // If the picture exists
+       // console.log("Found user updated and returning img", userPic)
+        return res.json(image);
     } catch (error) {
-        console.log(error)
+       // console.log(error)
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
@@ -42,8 +46,9 @@ const getPic = async (req, res) => {
     try {
         const picData = await Pic.findOne({username: username}).exec()
         res.json(picData)
+        //console.log("found user returning img", picData)
     } catch (error) {
-        console.log(error)
+        //console.log(error)
         res.status(500).json({error: 'User not found'})
     }
 }

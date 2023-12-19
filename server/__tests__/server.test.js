@@ -169,6 +169,121 @@ describe('Test API Endpoints', () => {
         
     });
 
+
+    it('POST /api/appointments/ Creating appointments for dummy user', async () => {
+        const data = {
+            username:"testuser@gmail.com"
+        }
+        await request(app).post('/api/appointments/').send(data).set('Content-Type', 'application/json')
+        const response = await request(app).get('/api/appointments/testuser@gmail.com')
+        //console.log(response)
+        //console.log(response2)
+        expect(response.status).toEqual(200)
+        expect(response._body.date).toEqual("10-December-2010")
+        
+    });
+
+
+    it('PUT /api/appointments/ Updating appointments for dummy user', async () => {
+        const data = {
+            username:"testuser@gmail.com",
+            date:"20-December-2023",
+            isPlanned:true,
+        }
+        const response2 = await request(app).put('/api/appointments/testuser@gmail.com').send(data)
+        const response = await request(app).get('/api/appointments/testuser@gmail.com')
+        //console.log(response)
+        //console.log(response2)
+        expect(response.status).toEqual(200)
+        expect(response._body.date).toEqual("20-December-2023")
+        
+    });
+
+    it('PUT /api/appointments/ Updating appointments for dummy user', async () => {
+        const data = {
+            username:"testuser@gmail.com",
+            date:"10-December-2010",
+            isPlanned:true,
+        }
+        const response2 = await request(app).put('/api/appointments/testuser@gmail.com').send(data)
+        const response = await request(app).get('/api/appointments/testuser@gmail.com')
+        //console.log(response)
+        //console.log(response2)
+        expect(response.status).toEqual(200)
+        expect(response._body.date).toEqual("10-December-2010")
+        
+    });
+
+    it('POST /api/pic/ Create Pic container', async () => {
+        const data = {
+            username:"testuser@gmail.com",
+        }
+        await request(app).post('/api/pic/').send(data).set('Content-Type', 'application/json')
+        const response = await request(app).get('/api/pic/testuser@gmail.com')
+        //console.log(response)
+        //console.log(response2)
+        expect(response.status).toEqual(200)
+        expect(response._body.username).toEqual("testuser@gmail.com")
+        
+    });
+
+    it('POST /api/pic/ Uploading picture', async () => {
+        const data = {
+            username:"testuser@gmail.com",
+            selectedFile:"pau_de_jumento"
+        }
+        const response2 = await request(app).put('/api/pic/testuser@gmail.com').send(data).set('Content-Type', 'application/json')
+        const response = await request(app).get('/api/pic/testuser@gmail.com')
+        //console.log(response)
+        //console.log(response2)
+        expect(response.status).toEqual(200)
+        expect(response._body.picture).toEqual("pau_de_jumento")
+        
+    });
+
+    it('POST /api/pic/ Uploading picture', async () => {
+        const data = {
+            username:"testuser@gmail.com",
+            selectedFile:null
+        }
+        const response2 = await request(app).put('/api/pic/testuser@gmail.com').send(data).set('Content-Type', 'application/json')
+        const response = await request(app).get('/api/pic/testuser@gmail.com')
+        //console.log(response)
+        //console.log(response2)
+        expect(response.status).toEqual(200)
+        expect(response._body.picture).toEqual("null")
+        
+    });
+
+    it('POST /api/pic/ Uploading picture', async () => {
+        const data = {
+            username:"testuser@gmail.com",
+            selectedFile:null
+        }
+        const response2 = await request(app).put('/api/pic/testuser@gmail.com').send(data).set('Content-Type', 'application/json')
+        const response = await request(app).get('/api/pic/testuser@gmail.com')
+        //console.log(response)
+        //console.log(response2)
+        expect(response.status).toEqual(200)
+        expect(response._body.picture).toEqual("null")
+        
+    });
+
+    it('POST /api/pic/ Uploading picture', async () => {
+        const data = {
+            username:"testuser@gmail.com",
+            selectedFile:null
+        }
+        const response2 = await request(app).put('/api/pic/testuser@gmail.com').send(data).set('Content-Type', 'application/json')
+        const response = await request(app).get('/api/pic/testuser@gmail.com')
+        //console.log(response)
+        //console.log(response2)
+        expect(response.status).toEqual(200)
+        expect(response._body.picture).toEqual("null")
+        
+    });
+    
+
     it('POST /api/task/ Delete tasks for dummy user', async () => {
         await request(app).delete('/api/user/testuser@gmail.com')
         const response = await request(app).get('/api/user/testuser@gmail.com')

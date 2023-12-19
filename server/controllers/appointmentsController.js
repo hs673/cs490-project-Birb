@@ -7,7 +7,7 @@ const createAppointments = async (req, res) => {
     const date = req.body.date;
 
     try {
-        const appointments = await Appointment.create({ username:username, date:'10-10-2010', isPlanned:false });
+        const appointments = await Appointment.create({ username:username, date:'10-December-2010', isPlanned:false });
         res.status(200).json(appointments);
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -22,12 +22,16 @@ const updateAppointments = async (req, res) => {
 
     try {
         const userAppointments = await Appointment.findOneAndUpdate({ username: username }, {username: username,date: date, isPlanned: isPlanned});
+        //console.log("In user appointments Update")
         if (!userAppointments) {
             return res.status(404).json({ error: 'User not found' });
-        }        
+        }
+        else{
+            return res.status(200).json(userAppointments);
+        }
         
     } catch (error) {
-        console.log(error)
+       // console.log(error)
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
@@ -39,7 +43,7 @@ const getAppointments = async (req, res) => {
         const appointmentData = await Appointment.findOne({username: username}).exec()
         res.json(appointmentData)
     } catch (error) {
-        console.log(error)
+        //console.log(error)
         res.status(500).json({error: 'User not found'})
     }
 }
