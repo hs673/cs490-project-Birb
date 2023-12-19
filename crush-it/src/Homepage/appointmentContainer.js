@@ -8,8 +8,8 @@ import {IoHourglassOutline, IoChevronDownCircleOutline} from 'react-icons/io5'
 import FocusTime from "./focustime";
 
 function AppointmentContainer(props){
-
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    //handleFocus(title, desc, timer, compTimer, category, index)
+    //props.handleFocus(props.title, props.notes, props.timers, props.compTimers, props.prio, props.index )
     // const bg = useColorModeValue('#F5F7F9', '#1A202C')
     const cont = useColorModeValue("white", "#2d3748")
     const passedFocus = useColorModeValue("#f3f6ff", "#243064") //use to gray out passed focus time
@@ -43,7 +43,7 @@ function AppointmentContainer(props){
                     :(<>
                     {props.isBefore? (<>
                         <Flex justifyContent={"center"} border={"2px solid #E2EAF1"} _hover={{bg:"#E2EAF162"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
-                            <Flex justifyContent={"flex-left"} alignItems={"center"} style={{ cursor: 'pointer' }} onClick={onOpen}>
+                            <Flex justifyContent={"flex-left"} alignItems={"center"} style={{ cursor: 'pointer' }} onClick={ () => props.handleFocus(props.title, props.notes, props.timers, props.compTimers, props.prio, props.index )}>
                                 <Heading margin={3} textAlign={"center"} fontSize={"14px"} fontWeight={"700"} fontFamily={"'DM Sans', sans-serif"}>
                                 Focus Time
                                 </Heading>
@@ -55,12 +55,12 @@ function AppointmentContainer(props){
                             <Spacer></Spacer>
                             <Flex justifyContent={"flex-end"} alignItems={"center"}  >
                                 <Icon as={IoHourglassOutline} margin={1} boxSize={"20px"} color={"#000000"} marginRight={"5px"} />
-                                <Heading   fontSize={"14px"}  margin={1} fontWeight={"700"} marginRight={"20px"} fontFamily={"'DM Sans', sans-serif"}>0/3</Heading>
+                                <Heading   fontSize={"14px"}  margin={1} fontWeight={"700"} marginRight={"20px"} fontFamily={"'DM Sans', sans-serif"}>{props.compTimers}/{props.timers}</Heading>
                             </Flex>
                         </Flex>
                     </>):(<>
                         <Flex justifyContent={"center"} border={"2px solid #6284FF"} _hover={{bg:"#6284ff14"}} width={"95%"} bg={"white"} marginLeft={4} height={45} maxH={"100px"} overflowY={"auto"}>
-                            <Flex justifyContent={"flex-left"} alignItems={"center"} style={{ cursor: 'pointer' }} onClick={onOpen}>
+                            <Flex justifyContent={"flex-left"} alignItems={"center"} style={{ cursor: 'pointer' }} onClick={ () => props.handleFocus(props.title, props.notes, props.timers, props.compTimers, props.prio, props.index )}>
                                 <Heading margin={3} textAlign={"center"} fontSize={"14px"} fontWeight={"700"} fontFamily={"'DM Sans', sans-serif"}>
                                 Focus Time
                                 </Heading>
@@ -72,7 +72,7 @@ function AppointmentContainer(props){
                             <Spacer></Spacer>
                             <Flex justifyContent={"flex-end"} alignItems={"center"}  >
                                 <Icon as={IoHourglassOutline} margin={1} boxSize={"20px"} color={"#6284FF"} marginRight={"5px"} />
-                                <Heading   fontSize={"14px"}  margin={1} fontWeight={"700"} marginRight={"20px"} fontFamily={"'DM Sans', sans-serif"}>0/3</Heading>
+                                <Heading   fontSize={"14px"}  margin={1} fontWeight={"700"} marginRight={"20px"} fontFamily={"'DM Sans', sans-serif"}>{props.compTimers}/{props.timers}</Heading>
                             </Flex>
                         </Flex>
                     </>)}
@@ -121,7 +121,7 @@ function AppointmentContainer(props){
                 ) 
                 
                 } 
-                <FocusTime isOpen={isOpen} onClose={onClose} title={props.title} notes={props.notes} />
+                
             </Td>
   )
     

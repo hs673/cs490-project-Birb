@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {Box, Table, Tbody, TableContainer, Tr, Td, useColorModeValue} from '@chakra-ui/react';
+import {Box, Table, Tbody, TableContainer, Tr, Td, useColorModeValue, useDisclosure} from '@chakra-ui/react';
 import AppointmentContainer from "./appointmentContainer";
 import {parse, format, addDays, parseISO, getHours, getMinutes, setHours, setMinutes, setSeconds, setMilliseconds} from 'date-fns';
 import FocusTime from "./focustime";
@@ -16,7 +16,6 @@ function Appointment(props){
     const [data, setData] = useState(null);
     const [appointmentData, setAppointmentData] = useState(null);
     //console.log(appointmentData);
-
     // ** FOR GUI **
     // events with relevant information from google calendar are stored here => check the second useEffect 
     // [
@@ -193,7 +192,7 @@ function Appointment(props){
                     }>
         <TableContainer>
            
-                {CreateTable(list, events, props.topList, props.otherList, props.importantList, props.selectedDate, timer)}
+                {CreateTable(list, events, props.topList, props.otherList, props.importantList, props.selectedDate, timer, props.handleCompletedChange)}
                 
             
         </TableContainer>
@@ -204,11 +203,17 @@ function Appointment(props){
 }
 
 
-function CreateTable(list, events, topList, otherList, importantList, date, time){
+function CreateTable(list, events, topList, otherList, importantList, date, time, handleCompletedChange){
 
     var child = []
-
-
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    //timers={focusPomo} completedTimers={focusCompletedPomo}
+    const [focusTitle, setFocusTitle] = useState('');
+    const [focusDesc, setFocusDesc] = useState('');
+    const [focusTime, setFocusTime] = useState('');
+    const [completeFocus, setCompleteFocus] = useState('');
+    const [focusCat, setFocusCat] = useState('');
+    const [focusIndex, setFocusIndex] = useState('');
 
     const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -257,36 +262,45 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
         }
         
         //adding focustime
+        var topCounter = 0;
+        if(topList[0] !== null){
         topList.forEach(task => {
+            
             if(task.dateAssigned === date){
-                //console.log("task builder",task.dateAssigned)
+                console.log("task builder",task)
                 //calculate time
                 //console.log("task time", (task.pomodoroTimers * time))
                var compTime = task.pomodoroTimers * time/60.0
                 for(var i = 11; i < 40; i++ ){
-                    if(list[i].length === 0 && compTime >0){
-                        list[i] = [task.title, true, task.description, i,i,i,i];
+                    if(list[i].length === 0 && compTime >0){ // 7 == timers, 8== complete 9 == prio 10 = index
+                        list[i] = [task.title, true, task.description, i,i,i,i, task.pomodoroTimers, task.completedPomodoroTimers, "Top Priority", topCounter ];
                         compTime -= .5
                     }
                 }
+                topCounter += 1;
             }
         });
-
-       importantList.forEach(task => {
+        }
+        var impCounter = 0;
+        if(importantList[0] !== null){
+        importantList.forEach(task => {
             if(task.dateAssigned === date){
                 //console.log("task builder",task.dateAssigned)
                 console.log("task time", (task.pomodoroTimers * time/60.0))
                 var compTime = task.pomodoroTimers * time/60.0
                 for(var i = 11; i < 40; i++ ){
                     if(list[i].length === 0 && compTime >0){
-                        list[i] = [task.title, true, task.description, i,i,i,i];
+                        list[i] = [task.title, true, task.description, i,i,i,i , task.pomodoroTimers, task.completedPomodoroTimers, "Important", impCounter];
                         compTime -= .5
                         
                     }
                 }
+                impCounter = 0;
             }
         });
-
+        }
+        var otherCounter = 0;
+        if(otherList[0] !== null){
         otherList.forEach(task => {
             if(task.dateAssigned === date){
                 //console.log("task builder",task.dateAssigned)
@@ -294,12 +308,14 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                 var compTime = task.pomodoroTimers * time/60.0
                 for(var i = 11; i < 40; i++ ){
                     if(list[i].length === 0 && compTime >0){
-                        list[i] = [task.title, true, task.description, i,i,i,i];
+                        list[i] = [task.title, true, task.description, i,i,i,i , task.pomodoroTimers, task.completedPomodoroTimers, "Other", otherCounter];
                         compTime -= .5
                     }
                 }
+                otherCounter+=1;
             }
         });
+        }
         
 
     }
@@ -310,13 +326,25 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
     var lastT = "";
 
     const bd = useColorModeValue('#6284FF', '#90cdf4');
+    function handleFocus(title, desc, timer, compTimer, category, index){
+        setFocusTitle(title);
+        setFocusDesc(desc)
+        setFocusTime(timer)
+        setCompleteFocus(compTimer)       
+        setFocusCat(category)
+        setFocusIndex(index)
+        onOpen();
+    }
 
     for (var i = 5; i < 25; i++) {
         const formattedTime = formatTime(currentTime);
         const conditionHour = i;
         const conditionValue = `${conditionHour}:${String(currentTime.getMinutes()).padStart(2, '0')}`;
         const isCurrentHour = formattedTime === conditionValue;
-        const isPast = currentTime.getHours() > i;
+        var isPast = date < (currentTime.getDate()+"-"+currentTime.toLocaleString('default', { month: 'long' })+"-"+currentTime.getFullYear() );
+        if(!isPast){
+            isPast = currentTime.getHours() > i
+        }
         const currentHour = parseInt(formattedTime.split(':')[0], 10);
         const hourPassed = conditionHour < currentHour
 
@@ -335,7 +363,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"} style={{
                             border: isCurrentHour ? `2px solid ${bd}` : 'none', color: isCurrentHour ? bd : 'inherit'
                         }}>{i === 12 ? `${i} PM` : i > 12 ? `${i - 12} PM` : `${i} AM`}</Td>
-                            <AppointmentContainer title={list[i*2-1][0]} isFocus={list[i*2-1][1]} notes={list[i*2-1][2]} isCont={false} isBefore={isPast}/>
+                            <AppointmentContainer title={list[i*2-1][0]} isFocus={list[i*2-1][1]} notes={list[i*2-1][2]} isCont={false} isBefore={isPast}  timers={list[i*2-1][7]} compTimers= {list[i*2-1][8]} prio={list[i*2-1][9]} index={list[i*2-1][10]} handleFocus={handleFocus}/>
                         </Tr>
                         
                     )
@@ -349,7 +377,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"} style={{
                             border: isCurrentHour ? `2px solid ${bd}` : 'none', color: isCurrentHour ? bd : 'inherit'
                         }}>{i === 12 ? `${i} PM` : i > 12 ? `${i - 12} PM` : `${i} AM`}</Td>
-                            <AppointmentContainer title={""} isFocus={list[i*2-1][1]} notes={list[i*2-1][2]} isCont={true} isEnd={true} isBefore={isPast}/>
+                            <AppointmentContainer title={""} isFocus={list[i*2-1][1]} notes={list[i*2-1][2]} isCont={true} isEnd={true} isBefore={isPast}  timers={list[i*2-1][7]} compTimers= {list[i*2-1][8]} prio={list[i*2-1][9]} index={list[i*2-1][10]} handleFocus={handleFocus}/>
                         </Tr>
                         
                     )
@@ -360,7 +388,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"} style={{
                             border: isCurrentHour ? `2px solid ${bd}` : 'none', color: isCurrentHour ? bd : 'inherit'
                         }}>{i === 12 ? `${i} PM` : i > 12 ? `${i - 12} PM` : `${i} AM`}</Td>
-                            <AppointmentContainer title={""} isFocus={list[i*2-1][1]} notes={list[i*2-1][2]} isCont={true} isEnd={false} isBefore={isPast}/>
+                            <AppointmentContainer title={""} isFocus={list[i*2-1][1]} notes={list[i*2-1][2]} isCont={true} isEnd={false} isBefore={isPast}  timers={list[i*2-1][7]} compTimers= {list[i*2-1][8]} prio={list[i*2-1][9]} index={list[i*2-1][10]} handleFocus={handleFocus}/>
                         </Tr>)
                     }
                 }
@@ -385,7 +413,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"} style={{
                             border: isCurrentHour ? `2px solid ${bd}` : 'none', color: isCurrentHour ? bd : 'inherit'
                         }}></Td>
-                            <AppointmentContainer title={list[i*2][0]} isFocus={list[i*2][1]} notes={list[i*2][2]} isCont={false} isBefore={isPast}/>
+                            <AppointmentContainer title={list[i*2][0]} isFocus={list[i*2][1]} notes={list[i*2][2]} isCont={false} isBefore={isPast}  timers={list[i*2][7]} compTimers= {list[i*2][8]} prio={list[i*2][9]} index={list[i*2][10]} handleFocus={handleFocus}/>
                         </Tr>
                         
                     )
@@ -398,7 +426,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"} style={{
                             border: isCurrentHour ? `2px solid ${bd}` : 'none', color: isCurrentHour ? bd : 'inherit'
                         }}></Td>
-                            <AppointmentContainer title={""} isFocus={list[i*2][1]} notes={list[i*2][2]} isCont={true} isEnd={true} isBefore={isPast}/>
+                            <AppointmentContainer title={""} isFocus={list[i*2][1]} notes={list[i*2][2]} isCont={true} isEnd={true} isBefore={isPast}  timers={list[i*2][7]} compTimers= {list[i*2][8]} prio={list[i*2][9]} index={list[i*2][10]} handleFocus={handleFocus}/>
                         </Tr>
                     )}
                     else{
@@ -407,7 +435,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"} style={{
                             border: isCurrentHour ? `2px solid ${bd}` : 'none', color: isCurrentHour ? bd : 'inherit'
                         }}></Td>
-                            <AppointmentContainer title={""} isFocus={list[i*2][1]} notes={list[i*2][2]} isCont={true} isEnd={false} isBefore={isPast}/>
+                            <AppointmentContainer title={""} isFocus={list[i*2][1]} notes={list[i*2][2]} isCont={true} isEnd={false} isBefore={isPast}  timers={list[i*2][7]} compTimers= {list[i*2][8]} prio={list[i*2][9]} index={list[i*2][10]} handleFocus={handleFocus}/>
                         </Tr>)
                     }
                 }
@@ -432,7 +460,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                         <Tr>
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"}
                             style={{ border: isCurrentHour ? `2px solid ${bd}` : 'none', color: isCurrentHour ? bd : 'inherit'}}>{i === 24 ? '12 AM' : i > 12 ? `${i - 12} PM` : `${i} AM`}</Td>
-                            <AppointmentContainer title={list[i*2-1][0]} notes={list[i*2-1][2]} remaining={list[i*2-1][3]} total={list[i][4]} isCont={false} isBefore={isPast} isFocus={list[i*2][1]}/>
+                            <AppointmentContainer title={list[i*2-1][0]} notes={list[i*2-1][2]} remaining={list[i*2-1][3]} total={list[i*2-1][4]} isCont={false} isBefore={isPast} isFocus={list[i*2][1]}  timers={list[i*2-1][7]} compTimers= {list[i*2-1][8]} prio={list[i*2-1][9]} index={list[i*2-1][10]} handleFocus={handleFocus}/>
                         </Tr>
                     )
                     boolIsCont = true
@@ -443,7 +471,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                         <Tr>
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"}
                             style={{ border: isCurrentHour ? `2px solid ${bd}` : 'none', color: isCurrentHour ? bd : 'inherit'}}>{i === 24 ? '12 AM' : i > 12 ? `${i - 12} PM` : `${i} AM`}</Td>
-                            <AppointmentContainer title={""} notes={list[i*2-1][2]} remaining={list[i*2-1][3]} total={list[i*2-1][4]} isCont={true} isEnd={true} isBefore={isPast} isFocus={list[i*2][1]}/>
+                            <AppointmentContainer title={""} notes={list[i*2-1][2]} remaining={list[i*2-1][3]} total={list[i*2-1][4]} isCont={true} isEnd={true} isBefore={isPast} isFocus={list[i*2][1]}  timers={list[i*2-1][7]} compTimers= {list[i*2-1][8]} prio={list[i*2-1][9]} index={list[i*2-1][10]} handleFocus={handleFocus}/>
                         </Tr>
                     )
                     }
@@ -452,7 +480,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                             <Tr>
                                 <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"}
                                 style={{ border: isCurrentHour ? `2px solid ${bd}` : 'none', color: isCurrentHour ? bd : 'inherit'}}>{i === 24 ? '12 AM' : i > 12 ? `${i - 12} PM` : `${i} AM`}</Td>
-                                <AppointmentContainer title={""} notes={list[i*2-1][2]} remaining={list[i*2-1][3]} total={list[i*2-1][4]} isCont={true} isEnd={false} isBefore={isPast} isFocus={list[i*2][1]}/>
+                                <AppointmentContainer title={""} notes={list[i*2-1][2]} remaining={list[i*2-1][3]} total={list[i*2-1][4]} isCont={true} isEnd={false} isBefore={isPast} isFocus={list[i*2][1]}  timers={list[i*2-1][7]} compTimers= {list[i*2-1][8]} prio={list[i*2-1][9]} index={list[i*2-1][10]} handleFocus={handleFocus}/>
                             </Tr>
                         )
                     }
@@ -475,7 +503,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                     child.push(
                         <Tr>
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"}></Td>
-                            <AppointmentContainer title={list[i*2][0]} notes={list[i*2][2]} remaining={list[i*2][3]} total={list[i*2][4]} isCont={false} isBefore={isPast} isFocus={list[i*2][1]}/>
+                            <AppointmentContainer title={list[i*2][0]} notes={list[i*2][2]} remaining={list[i*2][3]} total={list[i*2][4]} isCont={false} isBefore={isPast} isFocus={list[i*2][1]}  timers={list[i*2][7]} compTimers= {list[i*2][8]} prio={list[i*2][9]} index={list[i*2][10]} handleFocus={handleFocus}/>
                         </Tr>
                     )
                 }
@@ -484,14 +512,14 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                     child.push(
                         <Tr>
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"}></Td>
-                            <AppointmentContainer title={""} notes={list[i*2][2]} remaining={list[i*2][3]} total={list[i*2][4]} isCont={true} isEnd={true} isBefore={isPast} isFocus={list[i*2][1]}/>
+                            <AppointmentContainer title={""} notes={list[i*2][2]} remaining={list[i*2][3]} total={list[i*2][4]} isCont={true} isEnd={true} isBefore={isPast} isFocus={list[i*2][1]}  timers={list[i*2][7]} compTimers= {list[i*2][8]} prio={list[i*2][9]} index={list[i*2][10]} handleFocus={handleFocus}/>
                         </Tr>
                     )}
                     else{
                         child.push(
                             <Tr>
                                 <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"}></Td>
-                                <AppointmentContainer title={""} notes={list[i*2][2]} remaining={list[i*2][3]} total={list[i*2][4]} isCont={true} isEnd={false} isBefore={isPast} isFocus={list[i*2][1]}/>
+                                <AppointmentContainer title={""} notes={list[i*2][2]} remaining={list[i*2][3]} total={list[i*2][4]} isCont={true} isEnd={false} isBefore={isPast} isFocus={list[i*2][1]}  timers={list[i*2][7]} compTimers= {list[i*2][8]} prio={list[i*2][9]} index={list[i*2][10]} handleFocus={handleFocus}/>
                             </Tr>
                         )
                     }
@@ -521,7 +549,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                         )}
                 </Tbody>    
             </Table>
-            <FocusTime/>
+            <FocusTime isOpen={isOpen} onClose={onClose}  title={focusTitle} notes={focusDesc} timers={focusTime} completedTimers={completeFocus} handleCompletedChange={handleCompletedChange} category={focusCat} index={focusIndex}/>
         </Box>
     )
 }
