@@ -127,6 +127,8 @@ function UploadAvatar(props){
                 {/* Add your file input or upload component here */}
                 {/* Example: */}
                 <input type="file" accept="image/*" onChange={handleFileChange} /> {/* */}
+
+                <br></br>(must be 70 KB or smaller)
             </ModalBody>
             <ModalFooter>
                 <Button colorScheme="blue" mr={3} onClick={handleUpload}>
