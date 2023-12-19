@@ -1,9 +1,11 @@
 import React, {useLayoutEffect, useState, useEffect} from "react";
 import { useNavigate } from "react-router";
-import {Box, Heading, Container, VStack, HStack, useColorModeValue, Spacer} from '@chakra-ui/react';
+import {Box, Heading, Container, VStack, HStack,Flex, useColorModeValue, Spacer} from '@chakra-ui/react';
 import TaskContainer from "./TaskContainer"
 import DatePicker from './datepicker';
 import AddTask from './addtask';
+import Sidebar from "../components/sidebar";
+import Navbar from "../components/navbar";
 // import FocusTime from "./focustime";
 import Appointment from "./appointments";
 
@@ -296,7 +298,10 @@ function Homepage(){
     // const otherList = [["Homework 4", "", 10, "IP" ], ["Homework 3","", 3, "MO"]];
 
     return (
-      
+        <Flex>
+        <Sidebar  homepage={true} />
+         <Box flex="1">
+           <Navbar homepage={true} />
 
         <Box p={5} bg={bg} height={"94vh"}>
         <DatePicker onDateSelected={handleSelected} />
@@ -323,13 +328,15 @@ function Homepage(){
               
               </Heading>
 
-            <Appointment username={username} selectedDate={selectedDate}></Appointment>
+            <Appointment username={username} topList={topTasks} otherList={otherTasks} importantList={importantTasks} selectedDate={selectedDate}></Appointment>
   
           </VStack>
   
       </HStack>
   
   </Box>
+  </Box>
+     </Flex>
   )
     
 }
