@@ -3,29 +3,37 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-const subsubAppointmentsSchema = new Schema({
-    index: Number,
-    title: String,
-    description: String,
-    startHour: Number,
-    startMinutes: Number,
-    endHour: Number,
-    endMinutes: Number,
-    ifTask: Boolean
-})
-
-const subAppointmentsSchema = new Schema ({
-    date: String,
-    isPlanned: Boolean,
-    appointments: subsubAppointmentsSchema
-})
-
 const appointmentsSchema = new Schema({
     username: String,
-    dailyAppointments: [subAppointmentsSchema]
+    date: String,
+    isPlanned: Boolean
 }, {collection: 'appointments'})
 
 module.exports = mongoose.model('Appointments', appointmentsSchema);
+
+// const subsubAppointmentsSchema = new Schema({
+//     index: Number,
+//     title: String,
+//     description: String,
+//     startHour: Number,
+//     startMinutes: Number,
+//     endHour: Number,
+//     endMinutes: Number,
+//     ifTask: Boolean
+// })
+
+// const subAppointmentsSchema = new Schema ({
+//     date: String,
+//     isPlanned: Boolean,
+//     appointments: subsubAppointmentsSchema
+// })
+
+// const appointmentsSchema = new Schema({
+//     username: String,
+//     dailyAppointments: [subAppointmentsSchema]
+// }, {collection: 'appointments'})
+
+// module.exports = mongoose.model('Appointments', appointmentsSchema);
 
 
 // username: 
