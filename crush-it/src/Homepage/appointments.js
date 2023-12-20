@@ -248,7 +248,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
         //start with Google calendar events
         for(var i = 0; i < events.length; i++){
             //is event at 30 min mark or more?
-            if(events[i][4]>30){
+            if(events[i][4]>=30){
                 list[parseInt( events[i][3],10)*2] = events[i]
             }
             else{//if not mark as starting at the hour
@@ -396,7 +396,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
       
         if (i <= 12) {//hours before 12 AM
             if(list[i*2-1].length >= 1){//insert hours
-                if(lastT !== list[i*2-1][0] || lastCat !== list[i*2-1][9]){//check if it is a continuation
+                if(lastT !== list[i*2-1][0] || (list[i*2-1][9] !== null && list[i*2-1][9] !== undefined  && lastCat !== list[i*2-1][9])){//check if it is a continuation
                     child.push(
                         <Tr key={i}>
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"} style={{
@@ -410,7 +410,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                     
                 }
                 else{// if it is a cont
-                    if(list[i*2].length < 1 || lastT !== list[i*2][0]  || lastCat !== list[i*2-1][9] ){//It is the end
+                    if(list[i*2].length < 1 || lastT !== list[i*2][0]  || (list[i*2][9] !== null && list[i*2][9] !== undefined  && lastCat !== list[i*2][9] )){//It is the end
                     child.push(
                         <Tr>
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"} style={{
@@ -446,7 +446,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
             }
             if(list[i*2].length >= 1){//check 30 minute for task
                 
-                if(lastT !== list[i*2][0]  || lastCat !== list[i*2][9]){
+                if(lastT !== list[i*2][0]  || (list[i*2][9] !== null && list[i*2][9] !== undefined  && lastCat !== list[i*2][9])){
                     child.push(
                         <Tr>
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"} style={{
@@ -459,7 +459,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                     boolIsCont = true;
                 }
                 else{
-                    if(list[i*2+1].length < 1 || lastT !== list[i*2][0] || lastCat !== list[i*2][9] ){
+                    if(list[i*2+1].length < 1 || lastT !== list[i*2][0] || (list[i*2][9] !== null && list[i*2][9] !== undefined  && lastCat !== list[i*2][9] )){
                     child.push(
                         <Tr>
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"} style={{
@@ -495,7 +495,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
         }
         else{
             if(list[i*2-1].length >= 1){// if it is an Hour
-                if(lastT !== list[i*2-1][0]  || lastCat !== list[i*2-1][9]){//check if it is a cont
+                if(lastT !== list[i*2-1][0]  || (list[i*2-1][9] !== null && list[i*2-1][9] !== undefined  && lastCat !== list[i*2-1][9])){//check if it is a cont
                     child.push(
                         <Tr>
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"}
@@ -506,7 +506,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                     boolIsCont = true
                 }
                 else{//if is cont
-                    if(list[i*2].length < 1 || lastT !== list[i*2][0]  || lastCat !== list[i*2][9] ){//check if it is the end
+                    if(list[i*2].length < 1 || lastT !== list[i*2][0]  || (list[i*2][9] !== null && list[i*2][9] !== undefined  && lastCat !== list[i*2][9] )){//check if it is the end
                     child.push(
                         <Tr>
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"}
@@ -539,7 +539,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                 )
             }
             if(list[i*2].length >= 1){//it is min
-                if(lastT !==list[i*2][0]  || lastCat !== list[i*2][9]){//check if last insert was ==
+                if(lastT !==list[i*2][0]  || (list[i*2][9] !== null && list[i*2][9] !== undefined  && lastCat !== list[i*2][9])){//check if last insert was ==
                     boolIsCont = true
                     child.push(
                         <Tr>
@@ -549,7 +549,7 @@ function CreateTable(list, events, topList, otherList, importantList, date, time
                     )
                 }
                 else{// if it is
-                    if(list[i*2+1].length < 1 || lastT !== list[i*2][0]   || lastCat !== list[i*2][9]){//check if next is also equal
+                    if(list[i*2+1].length < 1 || lastT !== list[i*2][0]   || (list[i*2][9] !== null && list[i*2][9] !== undefined  && lastCat !== list[i*2][9])){//check if next is also equal
                     child.push(
                         <Tr>
                             <Td height={"45px"} padding={4} paddingLeft={4} paddingBottom={6} verticalAlign="middle" width={"80px"}></Td>
