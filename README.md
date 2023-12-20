@@ -1,6 +1,6 @@
 # cs490-project-Birb
 Repository for CS490 Project - Crush It. \
-Daily Task Management Web App built using the MERN Stack.
+Daily Task Management Web App built using the MERN Stack. \
 Deployed App Link: https://crush-it-td03.onrender.com/ 
 
 
